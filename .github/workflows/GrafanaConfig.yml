@@ -1,0 +1,23 @@
+name: GrafanaConfig
+
+on:  
+  push:
+    branches: master
+  pull_request:
+    branches: master
+        
+jobs:
+  build:
+    name: Build GrafanaConfig
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1        
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.2        
+      - name: Restore NuGet packages
+        run: nuget restore GrafanaConfig.sln
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1      
+      - name: Build The Solution
+        run: msbuild GrafanaConfig.sln
