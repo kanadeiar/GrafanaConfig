@@ -5,8 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GrafanaConfig"
         mc:Ignorable="d"
-        Title="Конфигуратор SQL-скриптор Графаны" Height="400" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Конфигуратор SQL-скриптов программного пакета Графаны" Height="500" Width="700">
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Создать"/>
+                <Separator/>
+                <MenuItem Header="Открыть"/>
+                <MenuItem Header="Сохранить"/>
+                <Separator/>
+                <MenuItem Header="Выход" Click="MenuItemExit_OnClick"/>
+            </MenuItem>
+        </Menu>
+        <ToolBar DockPanel.Dock="Top" FontSize="14">
+            <Button Content="Создать" />
+            <Separator/>
+            <Button Content="Открыть"/>
+            <Button Content="Сохранить"/>
+        </ToolBar>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="Готов" Name="textStatus"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock Text="c:\text.txt"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem HorizontalAlignment="Right" Visibility="Hidden">
+                <ProgressBar Value="30" Width="100" Height="18"/>
+            </StatusBarItem>
+        </StatusBar>
+        <GroupBox Header="Редактирование выбранной линии" DockPanel.Dock="Bottom">
+
+        </GroupBox>
+
+        <StackPanel>
+
+        </StackPanel>
+
+    </DockPanel>
 </Window>
