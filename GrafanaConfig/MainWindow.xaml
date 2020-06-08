@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GrafanaConfig"
         mc:Ignorable="d"
-        Title="Конфигуратор SQL-скриптов программного пакета Графаны" Height="500" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
+        Title="Конфигуратор SQL-скриптов программного пакета Графаны" Width="800" MinWidth="300" Height="500" MinHeight="200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Файл">
