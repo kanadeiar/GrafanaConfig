@@ -17,24 +17,53 @@
                 <Separator/>
                 <MenuItem Header="Выход" Click="MenuItemExit_OnClick"/>
             </MenuItem>
+            <MenuItem Header="Редактирование строк">
+                <MenuItem Header="Добавить новую"/>
+                <MenuItem Header="Удалить выбранную"/>
+                <MenuItem Header="Вверх по списку"/>
+                <MenuItem Header="Вниз по списку"/>
+            </MenuItem>
+            <MenuItem Header="SQL-скрипт">
+                <MenuItem Header="Сформировать SQL-скрипт для Фонда скважин"/>
+                <MenuItem Header="Сформировать SQL-скрипт для Тренда одного параметра"/>
+            </MenuItem>            
         </Menu>
-        <ToolBar DockPanel.Dock="Top" FontSize="14">
-            <Button Content="Создать" />
-            <Separator/>
-            <Button Content="Открыть"/>
-            <Button Content="Сохранить"/>
-        </ToolBar>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <ToolBar FontSize="14">
+                <Button Content="Создать" />
+                <Separator/>
+                <Button Content="Открыть"/>
+                <Separator/>
+                <Button Content="Сохранить"/>
+            </ToolBar>
+            <ToolBar FontSize="14">
+                <Button Content="Добавить"/>
+                <Separator/>
+                <Button Content="Удалить"/>
+                <Separator/>
+                <Button Content="Вверх"/>
+                <Separator/>
+                <Button Content="Вниз"/>
+            </ToolBar>
+            <ToolBar FontSize="14">
+                <Button Content="SQL Фонда скважин"/>
+                <Separator/>
+                <Button Content="SQL Тренда"/>
+            </ToolBar>
+        </StackPanel>
+
+
         <StatusBar DockPanel.Dock="Bottom">
             <TextBlock Text="Готов" Name="textStatus"/>
             <Separator/>
             <TextBlock Text="c:\text.txt"/>
             <Separator/>
-            <StatusBarItem HorizontalAlignment="Right" Margin="0,0,20,0">
+            <StatusBarItem HorizontalAlignment="Right" Margin="0,0,20,0" Visibility="Collapsed">
                 <ProgressBar Value="50" Width="100" Height="18"/>
             </StatusBarItem>
         </StatusBar>
         <Grid DockPanel.Dock="Bottom" Background="#FFC3FFC3">
-            <GroupBox Header="Редактирование выбранного элемента" Padding="5" x:Name="DetailsConfig" DataContext="{Binding ElementName=ListBoxConfigs, Path=SelectedItem}">
+            <GroupBox Header="Редактирование выбранного элемента" x:Name="DetailsConfig" DataContext="{Binding ElementName=ListBoxConfigs, Path=SelectedItem}">
                 <WrapPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <Label Grid.Column="0" Content="Название месторождения:"/>
