@@ -13,7 +13,7 @@ namespace GrafanaConfig
     /// </summary>
     public partial class MainWindow : Window
     {
-        IList<ConfigLine> configs = new ObservableCollection<ConfigLine>();
+        readonly IList<ConfigLine> configs = new ObservableCollection<ConfigLine>();
         public MainWindow()
         {
             InitializeComponent();
@@ -93,18 +93,13 @@ namespace GrafanaConfig
 
             #endregion
             ListViewConfigs.ItemsSource = configs;
-
-
         }
-
         private ICommand addLineCommand = null;
         public ICommand AddLineCommand => addLineCommand ?? (addLineCommand = new AddLineCommand());
-
 
         private void MenuItemExit_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
         }
-
     }
 }

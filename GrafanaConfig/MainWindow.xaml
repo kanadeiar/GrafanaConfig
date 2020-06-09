@@ -37,7 +37,7 @@
                 <Button Content="Сохранить"/>
             </ToolBar>
             <ToolBar FontSize="14">
-                <Button x:Name="buttonAddLine" Content="Добавить"
+                <Button Content="Добавить"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=AddLineCommand}"
                         CommandParameter="{Binding ElementName=ListViewConfigs, Path=ItemsSource}"/>
                 <Separator/>
