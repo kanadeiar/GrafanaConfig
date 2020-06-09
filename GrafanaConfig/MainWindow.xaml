@@ -127,7 +127,7 @@
                 </WrapPanel>
             </GroupBox>
         </Grid>
-        <ListView x:Name="ListViewConfigs" Background="#FFE4F9FF">
+        <ListView x:Name="ListViewConfigs" Background="#FFE4F9FF" SelectionMode="Single">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Название м-я"/>
