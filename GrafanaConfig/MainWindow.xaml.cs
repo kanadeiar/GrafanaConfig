@@ -13,7 +13,7 @@ namespace GrafanaConfig
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly IList<ConfigLine> configs = new ObservableCollection<ConfigLine>();
+        private readonly IList<ConfigLine> configs = new ObservableCollection<ConfigLine>();
         public MainWindow()
         {
             InitializeComponent();
@@ -94,9 +94,33 @@ namespace GrafanaConfig
             #endregion
             ListViewConfigs.ItemsSource = configs;
         }
-        private ICommand addLineCommand = null;
-        public ICommand AddLineCommand => addLineCommand ?? (addLineCommand = new AddLineCommand());
+        #region Команды
+        private MiniCommand addLineCommand = null;
+        public MiniCommand AddLineCommand => addLineCommand ?? (addLineCommand = new MiniCommand(() => 
+        {
+            configs?.Add(new ConfigLine
+            {
+                Name = "Vvedite",
+                Num = 1,
+                Status = 0,
+                Link = 0,
+                A = 0,
+                B = 0,
+                C = 0,
+                D = 0,
+                E = 0,
+                F = 0,
+                G = 0,
+                H = 0,
+                I = 0,
+                K = 0,
+            });
+        }));
 
+
+        //private ICommand addLineCommand = null;
+        //public ICommand AddLineCommand => addLineCommand ?? (addLineCommand = new AddLineCommand());
+        #endregion
         private void MenuItemExit_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
