@@ -5,8 +5,146 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GrafanaConfig"
         mc:Ignorable="d"
-        Title="Конфигуратор SQL-скриптор Графаны" Height="400" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Конфигуратор SQL-скриптов программного пакета Графаны" Width="800" MinWidth="300" Height="500" MinHeight="200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Создать"/>
+                <Separator/>
+                <MenuItem Header="Открыть"/>
+                <MenuItem Header="Сохранить"/>
+                <MenuItem Header="Сохранить как..."/>
+                <Separator/>
+                <MenuItem Header="Выход" Click="MenuItemExit_OnClick"/>
+            </MenuItem>
+            <MenuItem Header="Редактирование строк">
+                <MenuItem Header="Добавить новую"/>
+                <MenuItem Header="Удалить выбранную"/>
+                <MenuItem Header="Вверх по списку"/>
+                <MenuItem Header="Вниз по списку"/>
+            </MenuItem>
+            <MenuItem Header="SQL-скрипт">
+                <MenuItem Header="Сформировать SQL-скрипт для Фонда скважин"/>
+                <MenuItem Header="Сформировать SQL-скрипт для Тренда одного параметра"/>
+            </MenuItem>            
+        </Menu>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <ToolBar FontSize="14">
+                <Button Content="Создать" />
+                <Separator/>
+                <Button Content="Открыть"/>
+                <Separator/>
+                <Button Content="Сохранить"/>
+            </ToolBar>
+            <ToolBar FontSize="14">
+                <Button Content="Добавить"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=AddLineCommand}"
+                        CommandParameter="{Binding ElementName=ListViewConfigs, Path=ItemsSource}"/>
+                <Separator/>
+                <Button x:Name="buttonDeleteLine" Content="Удалить"/>
+                <Separator/>
+                <Button x:Name="bullonUpLine" Content="Вверх"/>
+                <Separator/>
+                <Button x:Name="buttonDownLine" Content="Вниз"/>
+            </ToolBar>
+            <ToolBar FontSize="14">
+                <Button Content="SQL Фонда скважин"/>
+                <Separator/>
+                <Button Content="SQL Тренда"/>
+            </ToolBar>
+        </StackPanel>
+
+
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock Text="Готов" Name="textStatus"/>
+            <Separator/>
+            <TextBlock Text="c:\text.txt"/>
+            <Separator/>
+            <StatusBarItem HorizontalAlignment="Right" Margin="0,0,20,0" Visibility="Collapsed">
+                <ProgressBar Value="50" Width="100" Height="18"/>
+            </StatusBarItem>
+        </StatusBar>
+        <Grid DockPanel.Dock="Bottom" Background="#FFC3FFC3">
+            <GroupBox Header="Редактирование выбранного элемента" x:Name="DetailsConfig" DataContext="{Binding ElementName=ListViewConfigs, Path=SelectedItem}">
+                <WrapPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="Название месторождения:"/>
+                        <TextBox Grid.Column="1" Width="150" Text="{Binding Path=Name}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="Номер скважины:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=Num}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="Состояние:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=Status}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="Связь:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=Link}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="A:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=A}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="BS:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=B}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="C:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=C}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="D:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=D}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="E:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=E}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="F:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=F}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="G:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=G}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="H:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=H}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="I:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=I}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Label Grid.Column="0" Content="K:"/>
+                        <TextBox Grid.Column="1" Width="80" Text="{Binding Path=K}" FontSize="14"/>
+                    </StackPanel>
+                </WrapPanel>
+            </GroupBox>
+        </Grid>
+        <ListView x:Name="ListViewConfigs" Background="#FFE4F9FF">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Название м-я"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Num}" Header="Номер"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Status}" Header="Состояние"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Link}" Header="Связь"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=A}" Header="A"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=B}" Header="B"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=C}" Header="C"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=D}" Header="D"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=E}" Header="E"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=F}" Header="F"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=G}" Header="G"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=H}" Header="H"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=I}" Header="I"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=K}" Header="K"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
 </Window>
