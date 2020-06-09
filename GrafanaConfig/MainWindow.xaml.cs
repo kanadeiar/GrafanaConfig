@@ -116,10 +116,17 @@ namespace GrafanaConfig
                 K = 0,
             });
         }));
+        private MiniCommand<ConfigLine> deleteLineCommand = null;
+        public MiniCommand<ConfigLine> DeleteLineCommand => deleteLineCommand ?? (deleteLineCommand = new MiniCommand<ConfigLine>((ConfigLine line) => 
+        {
+            configs?.Remove(line);
+        }, (ConfigLine line) =>
+        {
+            return line != null;
+        }));
 
 
-        //private ICommand addLineCommand = null;
-        //public ICommand AddLineCommand => addLineCommand ?? (addLineCommand = new AddLineCommand());
+
         #endregion
         private void MenuItemExit_OnClick(object sender, RoutedEventArgs e)
         {

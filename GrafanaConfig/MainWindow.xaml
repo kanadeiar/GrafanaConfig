@@ -40,7 +40,9 @@
                 <Button x:Name="buttonAddLine" Content="Добавить"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=AddLineCommand}"/>
                 <Separator/>
-                <Button x:Name="buttonDeleteLine" Content="Удалить"/>
+                <Button x:Name="buttonDeleteLine" Content="Удалить"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DeleteLineCommand}"
+                        CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
                 <Separator/>
                 <Button x:Name="bullonUpLine" Content="Вверх"/>
                 <Separator/>
