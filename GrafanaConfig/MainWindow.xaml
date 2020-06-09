@@ -37,7 +37,9 @@
                 <Button Content="Сохранить"/>
             </ToolBar>
             <ToolBar FontSize="14">
-                <Button x:Name="buttonAddLine" Content="Добавить" Click="ButtonAddLine_Click"/>
+                <Button x:Name="buttonAddLine" Content="Добавить"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=AddLineCommand}"
+                        CommandParameter="{Binding ElementName=ListViewConfigs, Path=ItemsSource}"/>
                 <Separator/>
                 <Button x:Name="buttonDeleteLine" Content="Удалить"/>
                 <Separator/>
@@ -63,7 +65,7 @@
             </StatusBarItem>
         </StatusBar>
         <Grid DockPanel.Dock="Bottom" Background="#FFC3FFC3">
-            <GroupBox Header="Редактирование выбранного элемента" x:Name="DetailsConfig" DataContext="{Binding ElementName=ListBoxConfigs, Path=SelectedItem}">
+            <GroupBox Header="Редактирование выбранного элемента" x:Name="DetailsConfig" DataContext="{Binding ElementName=ListViewConfigs, Path=SelectedItem}">
                 <WrapPanel>
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <Label Grid.Column="0" Content="Название месторождения:"/>
@@ -124,7 +126,7 @@
                 </WrapPanel>
             </GroupBox>
         </Grid>
-        <ListView x:Name="ListBoxConfigs" Background="#FFE4F9FF">
+        <ListView x:Name="ListViewConfigs" Background="#FFE4F9FF">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Название м-я"/>
