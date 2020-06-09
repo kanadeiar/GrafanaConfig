@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GrafanaConfig.Models
 {
-    class ConfigLine : INotifyPropertyChanged
+    public class ConfigLine : INotifyPropertyChanged
     {
         private string name;
         public string Name

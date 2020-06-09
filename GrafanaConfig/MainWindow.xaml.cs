@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using GrafanaConfig.Models;
+using System.Windows.Input;
+using System.Windows.Controls;
 
 namespace GrafanaConfig
 {
@@ -10,7 +12,7 @@ namespace GrafanaConfig
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly IList<ConfigLine> configs = new ObservableCollection<ConfigLine>();
+        IList<ConfigLine> configs = new ObservableCollection<ConfigLine>();
         public MainWindow()
         {
             InitializeComponent();
@@ -90,14 +92,34 @@ namespace GrafanaConfig
 
             #endregion
             ListBoxConfigs.ItemsSource = configs;
+
+
         }
-
-
-
 
         private void MenuItemExit_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void ButtonAddLine_Click(object sender, RoutedEventArgs e)
+        {
+            configs.Add(new ConfigLine {
+                Name = "Vvedite",
+                Num = 1,
+                Status = 0,
+                Link = 0, 
+                A = 0,
+                B = 0,
+                C = 0,
+                D = 0,
+                E = 0,
+                F = 0,
+                G = 0,
+                H = 0,
+                I = 0,
+                K = 0,
+
+            });
         }
     }
 }

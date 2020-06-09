@@ -37,13 +37,13 @@
                 <Button Content="Сохранить"/>
             </ToolBar>
             <ToolBar FontSize="14">
-                <Button Content="Добавить"/>
+                <Button x:Name="buttonAddLine" Content="Добавить" Click="ButtonAddLine_Click"/>
                 <Separator/>
-                <Button Content="Удалить"/>
+                <Button x:Name="buttonDeleteLine" Content="Удалить"/>
                 <Separator/>
-                <Button Content="Вверх"/>
+                <Button x:Name="bullonUpLine" Content="Вверх"/>
                 <Separator/>
-                <Button Content="Вниз"/>
+                <Button x:Name="buttonDownLine" Content="Вниз"/>
             </ToolBar>
             <ToolBar FontSize="14">
                 <Button Content="SQL Фонда скважин"/>
