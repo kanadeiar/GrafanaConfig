@@ -321,12 +321,18 @@ namespace GrafanaConfig
             () =>
             {
                 string sql = GenSQL.GetTopSql(_configs, "Novospasskoe");
+                WindowSQL window = new WindowSQL();
+                window.textSQL = sql;
+                window.ShowDialog();
             }));
         private MiniCommand getTrendSqlCommand = null;
         public MiniCommand GetTrendSqlCommand => getTrendSqlCommand ?? (getTrendSqlCommand = new MiniCommand(
             () =>
             {
                 string sql = GenSQL.GetTrendSql(_configs);
+                WindowSQL window = new WindowSQL();
+                window.textSQL = sql;
+                window.ShowDialog();
             }));
 
 
@@ -338,5 +344,7 @@ namespace GrafanaConfig
         {
             Close();
         }
+
+
     }
 }

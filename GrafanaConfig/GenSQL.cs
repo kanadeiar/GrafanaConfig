@@ -114,8 +114,6 @@ INTO #temptrenddata
 FROM riannon.telemetry.dbo.MasterSCADADataRaw tmr
 WHERE (tmr.ProjectID=1) and (tmr.Layer=2 or tmr.Layer=1) and (tmr.ItemID = @ItemID) and ($__timeFilter(tmr.[Time]))
 ORDER BY tmr.Time;
---SELECT Value, time FROM #temptrenddata
---ORDER BY time;
 
 DECLARE @description varchar(256);
 SET @description = (SELECT tmi.Name
@@ -123,7 +121,7 @@ FROM riannon.telemetry.dbo.MasterSCADADataItems tmi
 WHERE tmi.ItemID = @ItemID);
 
 DECLARE @SQL varchar(8000);
-SET @SQL = 'SELECT Value as "); sb.Append("\"'+@description+')\", time\n");
+SET @SQL = 'SELECT Value as "); sb.Append("\"'+@description+'\", time\n");
             sb.Append(@"FROM #temptrenddata
 ORDER BY time;';
 exec(@SQL);");

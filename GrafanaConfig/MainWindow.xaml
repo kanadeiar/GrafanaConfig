@@ -56,7 +56,8 @@
                 <Button x:Name="buttonGetSQL" Content="SQL Фонда скважин"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=GetSqlCommand}"/>
                 <Separator/>
-                <Button Content="SQL Тренда"/>
+                <Button x:Name="buttonGetTrendSQL" Content="SQL Тренда"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=GetTrendSqlCommand}"/>
             </ToolBar>
         </StackPanel>
 
