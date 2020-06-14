@@ -8,11 +8,11 @@ using System.Windows;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("GrafanaConfig")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("https://github.com/kanadeiar/GrafanaConfig")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("https://github.com/kanadeiar/GrafanaConfig")]
 [assembly: AssemblyProduct("GrafanaConfig")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("https://github.com/kanadeiar/GrafanaConfig")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
