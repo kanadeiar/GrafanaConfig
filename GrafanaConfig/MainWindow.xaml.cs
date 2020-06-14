@@ -317,13 +317,19 @@ namespace GrafanaConfig
             (line) => line != null && _configs.IndexOf(line) <= _configs.Count - 2));
 
         private MiniCommand getSqlCommand = null;
-
         public MiniCommand GetSqlCommand => getSqlCommand ?? (getSqlCommand = new MiniCommand(
             () =>
             {
                 string sql = GenSQL.GetTopSql(_configs, "Novospasskoe");
             }));
-        
+        private MiniCommand getTrendSqlCommand = null;
+        public MiniCommand GetTrendSqlCommand => getTrendSqlCommand ?? (getTrendSqlCommand = new MiniCommand(
+            () =>
+            {
+                string sql = GenSQL.GetTrendSql(_configs);
+            }));
+
+
         
         
         #endregion Команды

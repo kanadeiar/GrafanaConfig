@@ -9,54 +9,9 @@ namespace GrafanaConfig
         public static string GetTopSql(IList<ConfigLine> configs, params string[] names)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(@"IF OBJECT_ID('tempdb..#tempsetdata' ) IS NOT NULL DROP TABLE #tempsetdata;
-CREATE TABLE #tempsetdata
-(
-id INT NOT NULL,
-name VARCHAR(64) NOT NULL,
-number INT NULL,
-[status] INT NULL,
-[link] INT NULL,
-a INT NULL,
-b INT NULL, 
-c INT NULL,
-d INT NULL,
-e INT NULL,
-f INT NULL,
-g INT NULL,
-h INT NULL,
-i INT NULL,
-k INT NULL,
-CONSTRAINT PK_idTempSetDataId PRIMARY KEY (id),
-);
-INSERT INTO #tempsetdata(id,name,number,[status],link, a,b,c,d,e,f,g,h,i,k)
-VALUES \n");
+            GenHeadSql(configs, sb);
 
-            for (int i = 0; i < configs.Count; i++)
-            {
-                if (i > 0)
-                    sb.Append(",");
-                sb.Append($"({i + 1},");
-                sb.Append($"'{configs[i].Name}',");
-                sb.Append($"{configs[i].Num},");
-                sb.Append($"{((configs[i].Status != 0) ? configs[i].Status.ToString() : "NULL")},");
-                sb.Append($"{((configs[i].Link != 0) ? configs[i].Link.ToString() : "NULL")},");
-                sb.Append($"{((configs[i].A != 0) ? configs[i].A.ToString() : "NULL")},");
-                sb.Append($"{((configs[i].B != 0) ? configs[i].B.ToString() : "NULL")},");
-                sb.Append($"{((configs[i].C != 0) ? configs[i].C.ToString() : "NULL")},");
-                sb.Append($"{((configs[i].D != 0) ? configs[i].D.ToString() : "NULL")},");
-                sb.Append($"{((configs[i].E != 0) ? configs[i].E.ToString() : "NULL")},");
-                sb.Append($"{((configs[i].F != 0) ? configs[i].F.ToString() : "NULL")},");
-                sb.Append($"{((configs[i].G != 0) ? configs[i].G.ToString() : "NULL")},");
-                sb.Append($"{((configs[i].H != 0) ? configs[i].H.ToString() : "NULL")},");
-                sb.Append($"{((configs[i].I != 0) ? configs[i].I.ToString() : "NULL")},");
-                sb.Append($"{((configs[i].K != 0) ? configs[i].K.ToString() : "NULL")})\n");
-            }
-
-            sb.Append(@";
-DECLARE @countsetdata INT;
-SET @countsetdata = 94;
-IF OBJECT_ID('tempdb..#tempdata' ) IS NOT NULL DROP TABLE #tempdata;
+            sb.Append(@"IF OBJECT_ID('tempdb..#tempdata' ) IS NOT NULL DROP TABLE #tempdata;
 SELECT tmr.ItemID, tmi.Name, tmr.Value, tmr.[Time], tmr.Quality, tmr.Flags
 INTO #tempdata
 FROM riannon.telemetry.dbo.MasterSCADADataRaw tmr INNER JOIN riannon.telemetry.dbo.MasterSCADADataItems tmi
@@ -106,8 +61,6 @@ BEGIN
 	SET @linkv=NULL;
 	IF (@link IS NOT NULL)
 	BEGIN
-		--SET @ttmp = (SELECT [Time] FROM #tempdata WHERE ItemID=@link);
-		--IF (@ttmp >= dateadd(hh,-48,getdate())) SET @linkv=1; ELSE SET @linkv=0;
 		SET @itmp = (SELECT Quality FROM #tempdata WHERE ItemID=@link);
 		IF (@itmp = 192) SET @linkv=1; ELSE SET @linkv=0;
 	END
@@ -126,15 +79,112 @@ BEGIN
 	SET @ik=@ik+1;
 END
 SELECT name,number,[status],link,ROUND(a,1)AS a,ROUND(b,1)AS b,ROUND(c,1)AS c,ROUND(d,1)AS d,ROUND(e,1)AS e,ROUND(f,1)AS f,ROUND(g,1)AS g,ROUND(h,1)AS h 
-FROM #tempresultdata");
+FROM #tempresultdata
+");
 
+            bool firstWhere = true;
             foreach (var el in names)
             {
-                sb.AppendLine($"WHERE name LIKE '%{el}%'");
+                if (firstWhere)
+                {
+                    sb.Append($"WHERE (name LIKE '%{el}%')");
+                    firstWhere = false;
+                }
+                else
+                {
+                    sb.Append($" OR (name LIKE '%{el}%')");
+                }
             }
+            sb.Append("\n");
 
             sb.Append("ORDER BY id;");
             return sb.ToString();
         }
+        public static string GetTrendSql(IList<ConfigLine> configs)
+        {
+            StringBuilder sb = new StringBuilder();
+            GenHeadSql(configs, sb);
+            sb.Append(@"
+DECLARE @ItemID INT;
+SET @ItemID = (SELECT TOP 1 $col FROM #tempsetdata WHERE number=$num AND name='$name');
+
+IF OBJECT_ID('tempdb..#temptrenddata' ) IS NOT NULL DROP TABLE #temptrenddata;
+SELECT IIF(tmr.Quality=192,tmr.Value,NULL) as [Value], tmr.[Time] as time
+INTO #temptrenddata
+FROM riannon.telemetry.dbo.MasterSCADADataRaw tmr
+WHERE (tmr.ProjectID=1) and (tmr.Layer=2 or tmr.Layer=1) and (tmr.ItemID = @ItemID) and ($__timeFilter(tmr.[Time]))
+ORDER BY tmr.Time;
+--SELECT Value, time FROM #temptrenddata
+--ORDER BY time;
+
+DECLARE @description varchar(256);
+SET @description = (SELECT tmi.Name
+FROM riannon.telemetry.dbo.MasterSCADADataItems tmi
+WHERE tmi.ItemID = @ItemID);
+
+DECLARE @SQL varchar(8000);
+SET @SQL = 'SELECT Value as "); sb.Append("\"'+@description+')\", time\n");
+            sb.Append(@"FROM #temptrenddata
+ORDER BY time;';
+exec(@SQL);");
+
+            return sb.ToString();
+        }
+
+        
+        private static void GenHeadSql(IList<ConfigLine> configs, StringBuilder sb)
+        {
+            sb.Append(@"IF OBJECT_ID('tempdb..#tempsetdata' ) IS NOT NULL DROP TABLE #tempsetdata;
+CREATE TABLE #tempsetdata
+(
+id INT NOT NULL,
+name VARCHAR(64) NOT NULL,
+number INT NULL,
+[status] INT NULL,
+[link] INT NULL,
+a INT NULL,
+b INT NULL, 
+c INT NULL,
+d INT NULL,
+e INT NULL,
+f INT NULL,
+g INT NULL,
+h INT NULL,
+i INT NULL,
+k INT NULL,
+CONSTRAINT PK_idTempSetDataId PRIMARY KEY (id),
+);
+INSERT INTO #tempsetdata(id,name,number,[status],link, a,b,c,d,e,f,g,h,i,k)
+VALUES
+");
+
+            for (int i = 0; i < configs.Count; i++)
+            {
+                if (i > 0)
+                    sb.Append(",");
+                sb.Append($"({i + 1},");
+                sb.Append($"'{configs[i].Name}',");
+                sb.Append($"{configs[i].Num},");
+                sb.Append($"{((configs[i].Status != 0) ? configs[i].Status.ToString() : "NULL")},");
+                sb.Append($"{((configs[i].Link != 0) ? configs[i].Link.ToString() : "NULL")},");
+                sb.Append($"{((configs[i].A != 0) ? configs[i].A.ToString() : "NULL")},");
+                sb.Append($"{((configs[i].B != 0) ? configs[i].B.ToString() : "NULL")},");
+                sb.Append($"{((configs[i].C != 0) ? configs[i].C.ToString() : "NULL")},");
+                sb.Append($"{((configs[i].D != 0) ? configs[i].D.ToString() : "NULL")},");
+                sb.Append($"{((configs[i].E != 0) ? configs[i].E.ToString() : "NULL")},");
+                sb.Append($"{((configs[i].F != 0) ? configs[i].F.ToString() : "NULL")},");
+                sb.Append($"{((configs[i].G != 0) ? configs[i].G.ToString() : "NULL")},");
+                sb.Append($"{((configs[i].H != 0) ? configs[i].H.ToString() : "NULL")},");
+                sb.Append($"{((configs[i].I != 0) ? configs[i].I.ToString() : "NULL")},");
+                sb.Append($"{((configs[i].K != 0) ? configs[i].K.ToString() : "NULL")})\n");
+            }
+
+            sb.Append(@";
+DECLARE @countsetdata INT;
+SET @countsetdata = 94;
+");
+        }
+
+
     }
 }
