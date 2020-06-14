@@ -44,12 +44,17 @@
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DeleteLineCommand}"
                         CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
                 <Separator/>
-                <Button x:Name="bullonUpLine" Content="Вверх"/>
+                <Button x:Name="bullonUpLine" Content="Вверх"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=UpLineCommand}"
+                        CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
                 <Separator/>
-                <Button x:Name="buttonDownLine" Content="Вниз"/>
+                <Button x:Name="buttonDownLine" Content="Вниз"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DownLineCommand}"
+                        CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
             </ToolBar>
             <ToolBar FontSize="14">
-                <Button Content="SQL Фонда скважин"/>
+                <Button x:Name="buttonGetSQL" Content="SQL Фонда скважин"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=GetSqlCommand}"/>
                 <Separator/>
                 <Button Content="SQL Тренда"/>
             </ToolBar>
