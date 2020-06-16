@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GrafanaConfig.Commands
 {
+    /// <summary> Мини команды WPF </summary>
     public class MiniCommand : CommandBase
     {
         private readonly Action execute;
@@ -26,6 +27,8 @@ namespace GrafanaConfig.Commands
             this.execute();
         }
     }
+    /// <summary> Обобщенные команды WPF </summary>
+    /// <typeparam name="T">тип</typeparam>
     public class MiniCommand<T> : CommandBase
     {
         private readonly Action<T> execute;

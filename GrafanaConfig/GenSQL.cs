@@ -4,8 +4,13 @@ using GrafanaConfig.Models;
 
 namespace GrafanaConfig
 {
+    /// <summary> Генератор SQL кода </summary>
     static class GenSQL
     {
+        /// <summary> Генератор SQL кода фонда скважин </summary>
+        /// <param name="configs"></param>
+        /// <param name="names"></param>
+        /// <returns></returns>
         public static string GetTopSql(IList<ConfigLine> configs, params string[] names)
         {
             StringBuilder sb = new StringBuilder();
@@ -101,6 +106,9 @@ FROM #tempresultdata
             sb.Append("ORDER BY id;");
             return sb.ToString();
         }
+        /// <summary> Генератор SQL кода запроса на тренд параметра </summary>
+        /// <param name="configs"></param>
+        /// <returns></returns>
         public static string GetTrendSql(IList<ConfigLine> configs)
         {
             StringBuilder sb = new StringBuilder();
@@ -130,7 +138,9 @@ exec(@SQL);");
             return sb.ToString();
         }
 
-        
+        /// <summary> Генерация верхней части SQL запроса </summary>
+        /// <param name="configs"></param>
+        /// <param name="sb"></param>
         private static void GenHeadSql(IList<ConfigLine> configs, StringBuilder sb)
         {
             sb.Append(@"IF OBJECT_ID('tempdb..#tempsetdata' ) IS NOT NULL DROP TABLE #tempsetdata;

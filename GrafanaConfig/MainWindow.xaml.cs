@@ -11,6 +11,7 @@ namespace GrafanaConfig
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary> Конфигурация </summary>
         private readonly IList<ConfigLine> _configs = new ObservableCollection<ConfigLine>();
 
         public MainWindow()
