@@ -17,7 +17,7 @@
             <Button x:Name="buttonExit" Grid.Column="2" Width="150" Height="30" Margin="5" Content="Закрыть" Click="ButtonExit_Click"/>
         </Grid>
         <GroupBox Header="Сформированный SQL-запрос:">
-            <TextBox x:Name="resultTextBox" VerticalScrollBarVisibility="Visible"/>
+            <TextBox x:Name="resultTextBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto"/>
         </GroupBox>
     </DockPanel>
 </Window>

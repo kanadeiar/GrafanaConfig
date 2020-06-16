@@ -5,9 +5,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace GrafanaConfig.Models
 {
+    [Serializable]
     public class ConfigLine : INotifyPropertyChanged
     {
         private string name;
@@ -55,6 +57,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int a;
+        [XmlAttribute]
         public int A
         {
             get => a;
@@ -66,6 +69,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int b;
+        [XmlAttribute]
         public int B
         {
             get => b;
@@ -77,6 +81,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int c;
+        [XmlAttribute]
         public int C
         {
             get => c;
@@ -88,6 +93,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int d;
+        [XmlAttribute]
         public int D
         {
             get => d;
@@ -99,6 +105,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int e;
+        [XmlAttribute]
         public int E
         {
             get => e;
@@ -110,6 +117,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int f;
+        [XmlAttribute]
         public int F
         {
             get => f;
@@ -121,6 +129,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int g;
+        [XmlAttribute]
         public int G
         {
             get => g;
@@ -132,6 +141,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int h;
+        [XmlAttribute]
         public int H
         {
             get => h;
@@ -143,6 +153,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int i;
+        [XmlAttribute]
         public int I
         {
             get => i;
@@ -154,6 +165,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int k;
+        [XmlAttribute]
         public int K
         {
             get => k;

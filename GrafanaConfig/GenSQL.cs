@@ -11,7 +11,8 @@ namespace GrafanaConfig
             StringBuilder sb = new StringBuilder();
             GenHeadSql(configs, sb);
 
-            sb.Append(@"IF OBJECT_ID('tempdb..#tempdata' ) IS NOT NULL DROP TABLE #tempdata;
+            sb.Append(@"
+IF OBJECT_ID('tempdb..#tempdata' ) IS NOT NULL DROP TABLE #tempdata;
 SELECT tmr.ItemID, tmi.Name, tmr.Value, tmr.[Time], tmr.Quality, tmr.Flags
 INTO #tempdata
 FROM riannon.telemetry.dbo.MasterSCADADataRaw tmr INNER JOIN riannon.telemetry.dbo.MasterSCADADataItems tmi
@@ -177,9 +178,9 @@ VALUES
                 sb.Append($"{((configs[i].K != 0) ? configs[i].K.ToString() : "NULL")})\n");
             }
 
-            sb.Append(@";
+            sb.Append($@";
 DECLARE @countsetdata INT;
-SET @countsetdata = 94;
+SET @countsetdata = {configs.Count};
 ");
         }
 
