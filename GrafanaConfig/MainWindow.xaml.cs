@@ -1,5 +1,7 @@
 ﻿using GrafanaConfig.Commands;
 using GrafanaConfig.Models;
+using GrafanaConfig.Tools;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -13,6 +15,9 @@ namespace GrafanaConfig
     {
         /// <summary> Конфигурация </summary>
         private readonly IList<ConfigLine> _configs = new ObservableCollection<ConfigLine>();
+
+        private Lazy<XmlFileSaver<ObservableCollection<ConfigLine>>> lazyXmlFileSaver = new Lazy<XmlFileSaver<ObservableCollection<ConfigLine>>>();
+        private XmlFileSaver<ObservableCollection<ConfigLine>> xmlFileSaver() => lazyXmlFileSaver.Value;
 
         public MainWindow()
         {

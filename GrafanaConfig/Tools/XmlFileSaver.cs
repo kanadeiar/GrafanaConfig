@@ -12,10 +12,8 @@ namespace GrafanaConfig.Tools
     public class XmlFileSaver<T> where T : new()
     {
         public string FilePath { get; set; }
-        public XmlFileSaver(string filePath)
-        {
-            FilePath = filePath;
-        }
+        public XmlFileSaver()
+        { }
         public T OpenFromFile()
         {
             OpenFileDialog dialog = new OpenFileDialog();
