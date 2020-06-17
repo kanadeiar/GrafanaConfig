@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace GrafanaConfig.Tools
 {
@@ -15,17 +18,48 @@ namespace GrafanaConfig.Tools
         }
         public T OpenFromFile()
         {
-            T retMe = new T();
-
-            return retMe;
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.FileName = FilePath;
+            dialog.Filter = "Файл конфигурации (*.xml)|*.xml|Все файлы (*.*)|*.*";
+            dialog.Title = "Открытие файла";
+            dialog.ShowDialog();
+            if (dialog.FileName != string.Empty && File.Exists(dialog.FileName))
+            {
+                T retMe = new T();
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+                using (FileStream stream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    retMe = (T)xmlSerializer.Deserialize(stream);
+                }
+                return retMe;
+            }
+            return default(T);
         }
         public void SaveToFile(T item)
         {
-
+            if (string.IsNullOrEmpty(FilePath) || !File.Exists(FilePath))
+            {
+                SaveToFileAs(item);
+                return;
+            }
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+            using (FileStream stream = new FileStream(FilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                xmlSerializer.Serialize(stream, item);
+            }
         }
         public void SaveToFileAs(T item)
         {
-
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.FileName = FilePath;
+            dialog.Filter = "Файл конфигурации (*.xml)|*.xml|Все файлы (*.*)|*.*";
+            dialog.Title = "Сохранение файла как ...";
+            dialog.ShowDialog();
+            if (dialog.FileName != string.Empty && File.Exists(dialog.FileName))
+            {
+                FilePath = dialog.FileName;
+                SaveToFile(item);
+            }
         }
     }
 }
