@@ -1,4 +1,10 @@
-﻿using GrafanaConfig.Commands;
+﻿/// <summary>
+/// Grafana Config.
+/// Конфигуратор SQL-скриптов программного пакета Графана.
+/// Copyright © Рассахатский А.В. 2020.
+/// </summary>
+
+using GrafanaConfig.Commands;
 using GrafanaConfig.Models;
 using GrafanaConfig.Tools;
 using System;
@@ -7,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+
 
 namespace GrafanaConfig
 {
@@ -314,7 +321,20 @@ namespace GrafanaConfig
                 }
                 textFilePath.Text = xmlFileSaver.FilePath;
             }));
-
+        private MiniCommand saveFileAsCommand = null;
+        public MiniCommand SaveFileAsCommand => saveFileAsCommand ?? (saveFileAsCommand = new MiniCommand(
+            () =>
+            {
+                try
+                {
+                    xmlFileSaver.SaveToFileAs((ObservableCollection<ConfigLine>)_configs);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка! Не удалось сохранить файл!\n" + ex.Message);
+                }
+                textFilePath.Text = xmlFileSaver.FilePath;
+            }));
 
         private MiniCommand addLineCommand = null;
         public MiniCommand AddLineCommand => addLineCommand ?? (addLineCommand = new MiniCommand(
@@ -399,7 +419,10 @@ namespace GrafanaConfig
         {
             Close();
         }
-
-
+        private void MenuAbout_Click(object sender, RoutedEventArgs e)
+        {
+            AboutWindow aboutWindow = new AboutWindow();
+            aboutWindow.ShowDialog();
+        }
     }
 }

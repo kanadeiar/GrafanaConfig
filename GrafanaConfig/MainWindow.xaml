@@ -5,28 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GrafanaConfig"
         mc:Ignorable="d"
-        Title="Конфигуратор SQL-скриптов программного пакета Графаны" Width="900" MinWidth="300" Height="500" MinHeight="200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
+        Title="Конфигуратор SQL-скриптов программного пакета Графана" Width="900" MinWidth="300" Height="500" MinHeight="200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Файл">
-                <MenuItem Header="Создать"/>
+                <MenuItem Header="Создать"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=NewFileCommand}"/>
                 <Separator/>
-                <MenuItem Header="Открыть"/>
-                <MenuItem Header="Сохранить"/>
-                <MenuItem Header="Сохранить как..."/>
+                <MenuItem Header="Открыть"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=OpenFileCommand}"/>
+                <MenuItem Header="Сохранить"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=SaveFileCommand}"/>
+                <MenuItem Header="Сохранить как..."
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=SaveFileAsCommand}"/>
                 <Separator/>
                 <MenuItem Header="Выход" Click="MenuItemExit_OnClick"/>
             </MenuItem>
             <MenuItem Header="Редактирование строк">
-                <MenuItem Header="Добавить новую"/>
-                <MenuItem Header="Удалить выбранную"/>
-                <MenuItem Header="Вверх по списку"/>
-                <MenuItem Header="Вниз по списку"/>
+                <MenuItem Header="Добавить новую"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=AddLineCommand}"/>
+                <MenuItem Header="Удалить выбранную"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DeleteLineCommand}"
+                          CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
+                <MenuItem Header="Вверх по списку"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=UpLineCommand}"
+                          CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
+                <MenuItem Header="Вниз по списку"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DownLineCommand}"
+                          CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
             </MenuItem>
             <MenuItem Header="SQL-скрипт">
-                <MenuItem Header="Сформировать SQL-скрипт для Фонда скважин"/>
-                <MenuItem Header="Сформировать SQL-скрипт для Тренда одного параметра"/>
-            </MenuItem>            
+                <MenuItem Header="Сформировать SQL-скрипт для Фонда скважин"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=GetSqlCommand}"/>
+                <MenuItem Header="Сформировать SQL-скрипт для Тренда одного параметра"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=GetTrendSqlCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Справка">
+                <MenuItem x:Name="menuAbout" Header="О программе ..." Click="MenuAbout_Click"/>
+            </MenuItem>
         </Menu>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <ToolBar FontSize="14">
