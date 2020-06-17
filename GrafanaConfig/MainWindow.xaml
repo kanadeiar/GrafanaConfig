@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GrafanaConfig"
         mc:Ignorable="d"
-        Title="Конфигуратор SQL-скриптов программного пакета Графаны" Width="800" MinWidth="300" Height="500" MinHeight="200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
+        Title="Конфигуратор SQL-скриптов программного пакета Графаны" Width="900" MinWidth="300" Height="500" MinHeight="200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Файл">
@@ -30,11 +30,14 @@
         </Menu>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <ToolBar FontSize="14">
-                <Button Content="Создать" />
+                <Button x:Name="buttonNewFile" Content="Создать"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=NewFileCommand}"/>
                 <Separator/>
-                <Button Content="Открыть"/>
+                <Button x:Name="buttonOpenFile" Content="Открыть"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=OpenFileCommand}"/>
                 <Separator/>
-                <Button Content="Сохранить"/>
+                <Button x:Name="buttonSaveFile" Content="Сохранить"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=SaveFileCommand}"/>
             </ToolBar>
             <ToolBar FontSize="14">
                 <Button x:Name="buttonAddLine" Content="Добавить"
@@ -62,10 +65,10 @@
         </StackPanel>
 
 
-        <StatusBar DockPanel.Dock="Bottom">
+        <StatusBar DockPanel.Dock="Bottom" DataContext="XmlFileSaver">
             <TextBlock Text="Готов" Name="textStatus"/>
             <Separator/>
-            <TextBlock Text="c:\text.txt"/>
+            <TextBlock x:Name="textFilePath" Text="text.txt"/>
             <Separator/>
             <StatusBarItem HorizontalAlignment="Right" Margin="0,0,20,0" Visibility="Collapsed">
                 <ProgressBar Value="50" Width="100" Height="18"/>
@@ -133,7 +136,7 @@
                 </WrapPanel>
             </GroupBox>
         </Grid>
-        <ListView x:Name="ListViewConfigs" Background="#FFE4F9FF" SelectionMode="Single">
+        <ListView x:Name="ListViewConfigs" Background="#FFE4F9FF" SelectionMode="Single" FontSize="14">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Название м-я"/>

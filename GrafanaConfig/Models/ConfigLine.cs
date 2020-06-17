@@ -10,6 +10,7 @@ namespace GrafanaConfig.Models
     public class ConfigLine : INotifyPropertyChanged
     {
         private string name;
+        [XmlAttribute]
         public string Name
         {
             get => name;
@@ -21,6 +22,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int num;
+        [XmlAttribute]
         public int Num
         {
             get => num;
@@ -32,6 +34,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int status;
+        [XmlAttribute]
         public int Status
         {
             get => status;
@@ -43,6 +46,7 @@ namespace GrafanaConfig.Models
             }
         }
         private int link;
+        [XmlAttribute]
         public int Link
         {
             get => link;

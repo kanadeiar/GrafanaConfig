@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace GrafanaConfig
 {
@@ -14,10 +16,12 @@ namespace GrafanaConfig
     public partial class MainWindow : Window
     {
         /// <summary> Конфигурация </summary>
-        private readonly IList<ConfigLine> _configs = new ObservableCollection<ConfigLine>();
+        private IList<ConfigLine> _configs = new ObservableCollection<ConfigLine>();
 
-        private Lazy<XmlFileSaver<ObservableCollection<ConfigLine>>> lazyXmlFileSaver = new Lazy<XmlFileSaver<ObservableCollection<ConfigLine>>>();
-        private XmlFileSaver<ObservableCollection<ConfigLine>> xmlFileSaver() => lazyXmlFileSaver.Value;
+        //private Lazy<XmlFileSaver<ObservableCollection<ConfigLine>>> lazyXmlFileSaver = new Lazy<XmlFileSaver<ObservableCollection<ConfigLine>>>();
+        //private XmlFileSaver<ObservableCollection<ConfigLine>> xmlFileSaver() => lazyXmlFileSaver.Value;
+        private XmlFileSaver<ObservableCollection<ConfigLine>> xmlFileSaver = new XmlFileSaver<ObservableCollection<ConfigLine>>();
+
 
         public MainWindow()
         {
@@ -267,9 +271,51 @@ namespace GrafanaConfig
             #endregion Тестовые первоначальные данные
 
             ListViewConfigs.ItemsSource = _configs;
+
         }
 
         #region Команды
+        private MiniCommand newFileCommand = null;
+        public MiniCommand NewFileCommand => newFileCommand ?? (newFileCommand = new MiniCommand(
+            () =>
+            {
+                _configs.Clear();
+                xmlFileSaver.FilePath = string.Empty;
+                textFilePath.Text = string.Empty;
+            }));
+        private MiniCommand openFileCommand = null;
+        public MiniCommand OpenFileCommand => openFileCommand ?? (openFileCommand = new MiniCommand(
+            () =>
+            {
+                try
+                {
+                    var tmpConfigs = xmlFileSaver.OpenFromFile();
+                    _configs.Clear();
+                    foreach (var el in tmpConfigs)
+                        _configs.Add(el);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка! Не удалось открыть файл!\n" + ex.Message);
+                }
+                textFilePath.Text = xmlFileSaver.FilePath;
+            }));
+        private MiniCommand saveFileCommand = null;
+        public MiniCommand SaveFileCommand => saveFileCommand ?? (saveFileCommand = new MiniCommand(
+            () =>
+            {
+                try
+                {
+                    xmlFileSaver.SaveToFile((ObservableCollection<ConfigLine>)_configs);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка! Не удалось сохранить файл!\n" + ex.Message);
+                }
+                textFilePath.Text = xmlFileSaver.FilePath;
+            }));
+
+
         private MiniCommand addLineCommand = null;
         public MiniCommand AddLineCommand => addLineCommand ?? (addLineCommand = new MiniCommand(
             () =>
@@ -291,12 +337,15 @@ namespace GrafanaConfig
                     I = 0,
                     K = 0,
                 });
+                ListViewConfigs.SelectedIndex = _configs.Count - 1;
             }));
         private MiniCommand<ConfigLine> deleteLineCommand = null;
         public MiniCommand<ConfigLine> DeleteLineCommand => deleteLineCommand ?? (deleteLineCommand = new MiniCommand<ConfigLine>(
             (line) =>
             {
+                int pos = _configs.IndexOf(line);
                 _configs?.Remove(line);
+                ListViewConfigs.SelectedIndex = (pos < _configs.Count) ? pos : _configs.Count - 1;
             },
             (line) => line != null));
         private MiniCommand<ConfigLine> upLineCommand = null;
