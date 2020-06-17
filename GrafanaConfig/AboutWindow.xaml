@@ -15,18 +15,29 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="textName" Grid.Row="0" Text="f" FontSize="18"/>
-        <TextBlock x:Name="textVersion" Grid.Row="1" Text="версия"/>
-        <TextBlock x:Name="textCopyright" Grid.Row="2" Text="1"/>
-        <TextBlock x:Name="textDescription" Grid.Row="3" Text="Описание"/>
-        <TextBox x:Name="textBoxLic" Grid.Row="4"/>
+        <TextBlock x:Name="textName" Grid.Row="0" Text="Grafana Config" FontSize="20" FontWeight="Bold"/>
+        <TextBlock x:Name="textVersion" Grid.Row="1" Text="версия из приложения"/>
+        <TextBlock x:Name="textCopyright" Grid.Row="2" Text="Copyright © Рассахатский А.В. 2020"/>
+        <TextBlock x:Name="textDescription" Grid.Row="3" Text="{StaticResource GNUHead}" TextWrapping="Wrap"/>
+        <TextBox Grid.Row="4" x:Name="textBoxLic" Text="{StaticResource GNULicText}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+
         <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Row="0" Content="123" Margin="3"/>
+            <Button Grid.Column="3" Content="OK" Margin="3" FontSize="14" Click="ButtonOK_Click"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Email:" VerticalAlignment="Center"/>
+                <TextBox Margin="3" Text="kanadeiar@gmail.com" Width="160" HorizontalContentAlignment="Center"/>
+            </StackPanel>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Hyperlink NavigateUri="https://github.com/kanadeiar/GrafanaConfig" RequestNavigate="Hyperlink_RequestNavigate">
+                    GitHub
+                </Hyperlink>
+            </TextBlock>
+
         </Grid>
 
     </Grid>

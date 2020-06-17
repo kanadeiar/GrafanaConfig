@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -11,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace GrafanaConfig
@@ -24,25 +26,18 @@ namespace GrafanaConfig
         {
             InitializeComponent();
         }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            textName.Text = "Grafana Config";
             textVersion.Text = $"Версия: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
-            textCopyright.Text = "Copyright © Рассахатский А.В. 2020";
-            textDescription.Text = @"Эта программа является свободным программным обеспечением. Вы можете
-распространять и/или модифицировать её согласно условиям Стандартной
-Общественной Лицензии GNU, опубликованной Фондом Свободного Программного
-Обеспечения, версии 3 или, по Вашему желанию, любой более поздней версии.
-Эта программа распространяется в надежде, что она будет полезной, но БЕЗ
-ВСЯКИХ ГАРАНТИЙ, в том числе подразумеваемых гарантий ТОВАРНОГО СОСТОЯНИЯ ПРИ
-ПРОДАЖЕ и ГОДНОСТИ ДЛЯ ОПРЕДЕЛЁННОГО ПРИМЕНЕНИЯ. Смотрите Стандартную
-Общественную Лицензию GNU для получения дополнительной информации.
-Вы должны были получить копию Стандартной Общественной Лицензии GNU вместе
-с программой. В случае её отсутствия, посмотрите http://www.gnu.org/licenses/.";
-            
-
-
+        }
+        private void ButtonOK_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }
