@@ -11,9 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
-
+using System.Text;
 
 namespace GrafanaConfig
 {
@@ -24,11 +25,14 @@ namespace GrafanaConfig
     {
         /// <summary> Конфигурация </summary>
         private IList<ConfigLine> _configs = new ObservableCollection<ConfigLine>();
-
-        //private Lazy<XmlFileSaver<ObservableCollection<ConfigLine>>> lazyXmlFileSaver = new Lazy<XmlFileSaver<ObservableCollection<ConfigLine>>>();
-        //private XmlFileSaver<ObservableCollection<ConfigLine>> xmlFileSaver() => lazyXmlFileSaver.Value;
+        /// <summary> Работа с xml файлами </summary>
         private XmlFileSaver<ObservableCollection<ConfigLine>> xmlFileSaver = new XmlFileSaver<ObservableCollection<ConfigLine>>();
 
+        private string[] ConfigNames()
+        {
+            var sarr = _configs.GroupBy(g => g.Name).Select(s => s.Key).ToArray();
+            return sarr;
+        }
 
         public MainWindow()
         {
@@ -279,6 +283,9 @@ namespace GrafanaConfig
 
             ListViewConfigs.ItemsSource = _configs;
 
+
+
+
         }
 
         #region Команды
@@ -380,7 +387,7 @@ namespace GrafanaConfig
             },
             (line) => line != null && _configs.IndexOf(line) >= 1));
         private MiniCommand<ConfigLine> downLineCommand = null;
-        public MiniCommand<ConfigLine> DownLineCommand => downLineCommand ?? (upLineCommand = new MiniCommand<ConfigLine>(
+        public MiniCommand<ConfigLine> DownLineCommand => downLineCommand ?? (downLineCommand = new MiniCommand<ConfigLine>(
             (line) =>
             {
                 int targetIndex = _configs.IndexOf(line);
@@ -395,7 +402,8 @@ namespace GrafanaConfig
         public MiniCommand GetSqlCommand => getSqlCommand ?? (getSqlCommand = new MiniCommand(
             () =>
             {
-                string sql = GenSQL.GetTopSql(_configs, "Novospasskoe");
+                string name = ComboBoxNames.Text;
+                string sql = GenSQL.GetTopSql(_configs, name);
                 WindowSQL window = new WindowSQL();
                 window.textSQL = sql;
                 window.ShowDialog();
