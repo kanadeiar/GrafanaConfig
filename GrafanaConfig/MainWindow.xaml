@@ -3,62 +3,103 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GrafanaConfig"
+        xmlns:l="clr-namespace:GrafanaConfig"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Конфигуратор SQL-скриптов программного пакета Графаны" Width="800" MinWidth="300" Height="500" MinHeight="200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
+        Title="Конфигуратор SQL-скриптов программного пакета Графана" Width="900" MinWidth="300" Height="500" MinHeight="200" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip">
+    <Window.Resources>
+        <x:Array Type="sys:String" x:Key="arrStrNames">
+            <sys:String>Novospasskoe</sys:String>
+            <sys:String>Golodyaevskoe</sys:String>
+            <sys:String>Repjevskoe</sys:String>
+            <sys:String>Volodarskoe</sys:String>
+            <sys:String>Baranovskoe</sys:String>
+            <sys:String>Varvarovskoe</sys:String>
+            <sys:String>Verhozimskoe</sys:String>
+            <sys:String>Komarovskoe</sys:String>
+        </x:Array>
+    </Window.Resources>
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Файл">
-                <MenuItem Header="Создать"/>
+                <MenuItem Header="Создать"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=NewFileCommand}"/>
                 <Separator/>
-                <MenuItem Header="Открыть"/>
-                <MenuItem Header="Сохранить"/>
-                <MenuItem Header="Сохранить как..."/>
+                <MenuItem Header="Открыть"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=OpenFileCommand}"/>
+                <MenuItem Header="Сохранить"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=SaveFileCommand}"/>
+                <MenuItem Header="Сохранить как..."
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=SaveFileAsCommand}"/>
                 <Separator/>
                 <MenuItem Header="Выход" Click="MenuItemExit_OnClick"/>
             </MenuItem>
             <MenuItem Header="Редактирование строк">
-                <MenuItem Header="Добавить новую"/>
-                <MenuItem Header="Удалить выбранную"/>
-                <MenuItem Header="Вверх по списку"/>
-                <MenuItem Header="Вниз по списку"/>
+                <MenuItem Header="Добавить новую"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=AddLineCommand}"/>
+                <MenuItem Header="Удалить выбранную"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DeleteLineCommand}"
+                          CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
+                <MenuItem Header="Вверх по списку"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=UpLineCommand}"
+                          CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
+                <MenuItem Header="Вниз по списку"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DownLineCommand}"
+                          CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
             </MenuItem>
             <MenuItem Header="SQL-скрипт">
-                <MenuItem Header="Сформировать SQL-скрипт для Фонда скважин"/>
-                <MenuItem Header="Сформировать SQL-скрипт для Тренда одного параметра"/>
-            </MenuItem>            
+                <MenuItem Header="Сформировать SQL-скрипт для Фонда скважин"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=GetSqlCommand}"/>
+                <MenuItem Header="Сформировать SQL-скрипт для Тренда одного параметра"
+                          Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=GetTrendSqlCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Справка">
+                <MenuItem x:Name="menuAbout" Header="О программе ..." Click="MenuAbout_Click"/>
+            </MenuItem>
         </Menu>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <ToolBar FontSize="14">
-                <Button Content="Создать" />
+                <Button x:Name="buttonNewFile" Content="Создать"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=NewFileCommand}"/>
                 <Separator/>
-                <Button Content="Открыть"/>
+                <Button x:Name="buttonOpenFile" Content="Открыть"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=OpenFileCommand}"/>
                 <Separator/>
-                <Button Content="Сохранить"/>
+                <Button x:Name="buttonSaveFile" Content="Сохранить"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=SaveFileCommand}"/>
             </ToolBar>
             <ToolBar FontSize="14">
-                <Button Content="Добавить"
-                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=AddLineCommand}"
-                        CommandParameter="{Binding ElementName=ListViewConfigs, Path=ItemsSource}"/>
+                <Button x:Name="buttonAddLine" Content="Добавить"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=AddLineCommand}"/>
                 <Separator/>
-                <Button x:Name="buttonDeleteLine" Content="Удалить"/>
+                <Button x:Name="buttonDeleteLine" Content="Удалить"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DeleteLineCommand}"
+                        CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
                 <Separator/>
-                <Button x:Name="bullonUpLine" Content="Вверх"/>
+                <Button x:Name="bullonUpLine" Content="Вверх"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=UpLineCommand}"
+                        CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
                 <Separator/>
-                <Button x:Name="buttonDownLine" Content="Вниз"/>
+                <Button x:Name="buttonDownLine" Content="Вниз"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DownLineCommand}"
+                        CommandParameter="{Binding ElementName=ListViewConfigs, Path=SelectedItem}"/>
             </ToolBar>
             <ToolBar FontSize="14">
-                <Button Content="SQL Фонда скважин"/>
+                <ComboBox x:Name="ComboBoxNames" ItemsSource="{StaticResource arrStrNames}" Width="120" FontSize="14" Text="Novospasskoe">
+                </ComboBox>
+                <Button x:Name="buttonGetSQL" Content="SQL Фонда скважин"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=GetSqlCommand}"/>
                 <Separator/>
-                <Button Content="SQL Тренда"/>
+                <Button x:Name="buttonGetTrendSQL" Content="SQL Тренда"
+                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=GetTrendSqlCommand}"/>
             </ToolBar>
         </StackPanel>
 
 
-        <StatusBar DockPanel.Dock="Bottom">
+        <StatusBar DockPanel.Dock="Bottom" DataContext="XmlFileSaver">
             <TextBlock Text="Готов" Name="textStatus"/>
             <Separator/>
-            <TextBlock Text="c:\text.txt"/>
+            <TextBlock x:Name="textFilePath" Text="text.txt"/>
             <Separator/>
             <StatusBarItem HorizontalAlignment="Right" Margin="0,0,20,0" Visibility="Collapsed">
                 <ProgressBar Value="50" Width="100" Height="18"/>
@@ -126,7 +167,7 @@
                 </WrapPanel>
             </GroupBox>
         </Grid>
-        <ListView x:Name="ListViewConfigs" Background="#FFE4F9FF">
+        <ListView x:Name="ListViewConfigs" Background="#FFE4F9FF" SelectionMode="Single" FontSize="14">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Название м-я"/>

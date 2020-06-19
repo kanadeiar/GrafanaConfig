@@ -3,6 +3,9 @@ using System.Windows.Input;
 
 namespace GrafanaConfig.Commands
 {
+    /// <summary>
+    /// Базовая команда
+    /// </summary>
     public abstract class CommandBase : ICommand
     {
         public abstract bool CanExecute(object parameter);
