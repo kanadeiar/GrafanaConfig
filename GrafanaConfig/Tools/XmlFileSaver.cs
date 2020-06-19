@@ -1,11 +1,5 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace GrafanaConfig.Tools
@@ -56,10 +50,14 @@ namespace GrafanaConfig.Tools
             dialog.Filter = "Файл конфигурации (*.xml)|*.xml|Все файлы (*.*)|*.*";
             dialog.Title = "Сохранение файла как ...";
             dialog.ShowDialog();
-            if (dialog.FileName != string.Empty && File.Exists(dialog.FileName))
+            if (dialog.FileName != string.Empty)
             {
                 FilePath = dialog.FileName;
-                SaveToFile(item);
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+                using (FileStream stream = new FileStream(FilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    xmlSerializer.Serialize(stream, item);
+                }
             }
         }
     }
