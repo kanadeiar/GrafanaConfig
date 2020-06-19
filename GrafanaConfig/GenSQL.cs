@@ -1,16 +1,44 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Windows.Forms;
+using System.Xml.Serialization;
 using GrafanaConfig.Models;
+using GrafanaConfig.Tools;
 
 namespace GrafanaConfig
 {
     /// <summary> Генератор SQL кода </summary>
     static class GenSQL
     {
+        static private Secrets secrets;
+        static GenSQL()
+        {
+            secrets = new Secrets();
+            secrets.textRaw = "notwork";
+            secrets.textItems = "notwork";
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Secrets));
+            string fileName = "secret.xml";
+            if (File.Exists(fileName))
+            {
+                try
+                {
+                    using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None))
+                    {
+                        secrets = (Secrets)xmlSerializer.Deserialize(fs);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Не прочитать секретные настройки приложения из файла \"secret.xml\"!");
+                }
+            }
+        }
         /// <summary> Генератор SQL кода фонда скважин </summary>
-        /// <param name="configs"></param>
-        /// <param name="names"></param>
-        /// <returns></returns>
+        /// <param name="configs">конфигурация</param>
+        /// <param name="names">название</param>
+        /// <returns>SQL запрос</returns>
         public static string GetTopSql(IList<ConfigLine> configs, params string[] names)
         {
             StringBuilder sb = new StringBuilder();
@@ -20,8 +48,10 @@ namespace GrafanaConfig
 IF OBJECT_ID('tempdb..#tempdata' ) IS NOT NULL DROP TABLE #tempdata;
 SELECT tmr.ItemID, tmi.Name, tmr.Value, tmr.[Time], tmr.Quality, tmr.Flags
 INTO #tempdata
-FROM riannon.telemetry.dbo.MasterSCADADataRaw tmr INNER JOIN riannon.telemetry.dbo.MasterSCADADataItems tmi
-	ON (tmr.ProjectID=tmi.ProjectID AND tmr.Layer=1 AND tmi.ItemID=tmr.ItemID AND tmi.LastTime=tmr.[Time]);
+");
+            sb.AppendLine($"FROM {secrets.textRaw} tmr INNER JOIN {secrets.textItems} tmi");
+
+            sb.Append(@"    ON (tmr.ProjectID=tmi.ProjectID AND tmr.Layer=1 AND tmi.ItemID=tmr.ItemID AND tmi.LastTime=tmr.[Time]);
 DECLARE @id INT;
 DECLARE @name VARCHAR(64);
 DECLARE @number INT;
@@ -120,14 +150,16 @@ SET @ItemID = (SELECT TOP 1 $col FROM #tempsetdata WHERE number=$num AND name='$
 IF OBJECT_ID('tempdb..#temptrenddata' ) IS NOT NULL DROP TABLE #temptrenddata;
 SELECT IIF(tmr.Quality=192,tmr.Value,NULL) as [Value], tmr.[Time] as time
 INTO #temptrenddata
-FROM riannon.telemetry.dbo.MasterSCADADataRaw tmr
-WHERE (tmr.ProjectID=1) and (tmr.Layer=2 or tmr.Layer=1) and (tmr.ItemID = @ItemID) and ($__timeFilter(tmr.[Time]))
+");
+            sb.AppendLine($"FROM {secrets.textRaw} tmr");
+            sb.Append(@"WHERE (tmr.ProjectID=1) and (tmr.Layer=2 or tmr.Layer=1) and (tmr.ItemID = @ItemID) and ($__timeFilter(tmr.[Time]))
 ORDER BY tmr.Time;
 
 DECLARE @description varchar(256);
-SET @description = (SELECT tmi.Name
-FROM riannon.telemetry.dbo.MasterSCADADataItems tmi
-WHERE tmi.ItemID = @ItemID);
+SET @description = (SELECT tmi.Name");
+
+            sb.AppendLine($"FROM riannon.telemetry.dbo.MasterSCADADataItems tmi");
+            sb.Append(@"WHERE tmi.ItemID = @ItemID);
 
 DECLARE @SQL varchar(8000);
 SET @SQL = 'SELECT Value as "); sb.Append("\"'+@description+'\", time\n");
